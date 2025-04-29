@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>femaandara_ | Future Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f5f5f7;
+            --text-color: #121212;
+            --accent-color: #5918df;
+            --accent-glow: rgba(89, 24, 223, 0.15);
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --box-bg: rgba(255, 255, 255, 0.7);
+            --box-border: rgba(255, 255, 255, 0.2);
+            --gradient-start: rgba(89, 24, 223, 0.2);
+            --gradient-end: rgba(129, 83, 237, 0.1);
+        }
+
+        .dark-mode {
+            --primary-bg: #121212;
+            --secondary-bg: #1e1e1e;
+            --text-color: #f5f5f7;
+            --accent-color: #8c5eff;
+            --accent-glow: rgba(140, 94, 255, 0.25);
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --box-bg: rgba(30, 30, 30, 0.7);
+            --box-border: rgba(255, 255, 255, 0.05);
+            --gradient-start: rgba(140, 94, 255, 0.2);
+            --gradient-end: rgba(186, 155, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-circle {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .loading-circle-outer {
+            width: 100%;
+            height: 100%;
+            border: 3px dashed var(--accent-color);
+            border-radius: 50%;
+            animation: spin 4s linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .loading-circle-inner {
+            width: 80%;
+            height: 80%;
+            border: 2px dashed var(--accent-color);
+            border-radius: 50%;
+            animation: spin-reverse 3s linear infinite;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+        }
+
+        .loading-percentage {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+
+        /* Intro Section */
+        .intro {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .intro.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .intro h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--text-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .intro p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: var(--accent-glow);
+            border-radius: 3px;
+            z-index: -1;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 5rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .projects.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 3rem;
+        }
+
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-box {
+            position: relative;
+            height: 220px;
+            background: var(--box-bg);
+            border: 1px solid var(--box-border);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            transform: perspective(1000px) rotateX(5deg);
+        }
+
+        .project-box:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        .project-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, var(--gradient-start), var(--gradient-end), transparent);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: gradient-shift 15s ease infinite;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-box:hover::before {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-tag {
+            background-color: var(--accent-glow);
+            color: var(--accent-color);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            display: inline-block;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Light/Dark mode switch */
+        .theme-switch {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .switch {
+            width: 60px;
+            height: 30px;
+            background-color: var(--secondary-bg);
+            border-radius: 30px;
+            padding: 5px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .switch-handle {
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            left: 5px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .switch-handle {
+            left: 35px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Animation Keyframes */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 5px var(--accent-glow); }
+            50% { box-shadow: 0 0 20px var(--accent-glow); }
+            100% { box-shadow: 0 0 5px var(--accent-glow); }
+        }
+
+        /* Wave Animation */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            animation: wave 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-box:hover .wave {
+            opacity: 0.7;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .intro h1 {
+                font-size: 2.5rem;
+            }
+            
+            .intro p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .projects-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-circle">
+            <div class="loading-circle-outer"></div>
+            <div class="loading-circle-inner"></div>
+        </div>
+        <div class="loading-percentage">0%</div>
+    </div>
+
+    <!-- Theme Switch -->
+    <div class="theme-switch">
+        <div class="switch">
+            <div class="switch-handle"></div>
+        </div>
+    </div>
+
+    <!-- Intro Section -->
+    <section class="intro">
+        <h1>Welcome To Future Website <span class="highlight">femaandara_</span></h1>
+        <p>Hai Manusia, Selamat Datang Di Projek Fema</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <p class="section-subtitle">Let's Try My Project</p>
+            
+            <div class="projects-container">
+                <!-- Project 1 -->
+                <div class="project-box">
+                    <div>
+                        <h3 class="project-title">AI Assistant</h3>
+                        <p class="project-desc">A digital assistant powered by advanced AI to help with daily tasks and creative endeavors.</p>
+                        <span class="project-tag">AI</span>
+                        <span class="project-tag">Python</span>
+                    </div>
+                    <div class="wave"></div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-box">
+                    <div>
+                        <h3 class="project-title">Future Dashboard</h3>
+                        <p class="project-desc">An interactive dashboard with realtime data visualization and predictive analytics.</p>
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Data</span>
+                    </div>
+                    <div class="wave"></div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-box">
+                    <div>
+                        <h3 class="project-title">Metaverse Portal</h3>
+                        <p class="project-desc">Gateway to virtual realms where imagination becomes reality.</p>
+                        <span class="project-tag">WebGL</span>
+                        <span class="project-tag">3D</span>
+                    </div>
+                    <div class="wave"></div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="project-box">
+                    <div>
+                        <h3 class="project-title">Neural Interface</h3>
+                        <p class="project-desc">Connecting minds to machines through intuitive brain-computer interfaces.</p>
+                        <span class="project-tag">Neuroscience</span>
+                        <span class="project-tag">IoT</span>
+                    </div>
+                    <div class="wave"></div>
+                </div>
+                
+                <!-- Project 5 -->
+                <div class="project-box">
+                    <div>
+                        <h3 class="project-title">Quantum Computing</h3>
+                        <p class="project-desc">Exploring the realm of quantum algorithms and computational possibilities.</p>
+                        <span class="project-tag">Quantum</span>
+                        <span class="project-tag">Research</span>
+                    </div>
+                    <div class="wave"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2025 femaandara_ — All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const loadingScreen = document.querySelector('.loading-screen');
+        const loadingPercentage = document.querySelector('.loading-percentage');
+        const introSection = document.querySelector('.intro');
+        const projectsSection = document.querySelector('.projects');
+        const themeSwitch = document.querySelector('.switch');
+        
+        // Loading Animation
+        let progress = 0;
+        const loadingInterval = setInterval(() => {
+            progress += 1;
+            loadingPercentage.textContent = `${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(loadingInterval);
+                // Fade out loading screen
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        // Show intro with animation
+                        introSection.classList.add('active');
+                        
+                        // Show projects section after intro
+                        setTimeout(() => {
+                            projectsSection.classList.add('active');
+                            
+                            // Apply 3D effect to project boxes
+                            applyProjectBoxEffects();
+                        }, 800);
+                    }, 500);
+                }, 500);
+            }
+        }, 40); // 4 seconds total (100 * 40ms = 4000ms)
+        
+        // Theme toggle functionality
+        themeSwitch.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+        
+        // 3D Effect for Project Boxes
+        function applyProjectBoxEffects() {
+            const projectBoxes = document.querySelectorAll('.project-box');
+            
+            projectBoxes.forEach(box => {
+                box.addEventListener('mousemove', (e) => {
+                    const boxRect = box.getBoundingClientRect();
+                    const boxCenterX = boxRect.left + boxRect.width / 2;
+                    const boxCenterY = boxRect.top + boxRect.height / 2;
+                    
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    
+                    const angleY = (mouseX - boxCenterX) / 20;
+                    const angleX = (boxCenterY - mouseY) / 20;
+                    
+                    box.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(10px)`;
+                });
+                
+                box.addEventListener('mouseleave', () => {
+                    box.style.transform = 'perspective(1000px) rotateX(5deg) translateZ(0)';
+                });
+            });
+        }
+        
+        // Observe elements for scroll animations
+        const observeElements = () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        };
+        
+        // Call observer function
+        window.addEventListener('load', observeElements);
+    </script>
+</body>
+</html>
