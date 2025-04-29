@@ -513,4 +513,332 @@ function setupMobileCardInteractions() {
  * This can be called later to dynamically add more projects
  * @param {Object} projectData - Project information
  */
-function ad
+/**
+ * Helper function to add a new project card
+ * This can be called later to dynamically add more projects
+ * @param {Object} projectData - Project information
+ */
+function addProject(projectData) {
+    // Create project card container
+    const projectCard = document.createElement('div');
+    projectCard.classList.add('project-card');
+    
+    // Create inner card structure
+    const cardInner = document.createElement('div');
+    cardInner.classList.add('project-card-inner');
+    
+    // Add project image container
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('project-image');
+    
+    // Add image element
+    const image = document.createElement('img');
+    image.src = projectData.imageUrl;
+    image.alt = projectData.title;
+    imageContainer.appendChild(image);
+    
+    // Add featured badge if project is featured
+    if (projectData.featured) {
+        const badge = document.createElement('div');
+        badge.classList.add('project-badge');
+        badge.textContent = 'Featured';
+        imageContainer.appendChild(badge);
+    }
+    
+    // Create project details section
+    const detailsContainer = document.createElement('div');
+    detailsContainer.classList.add('project-details');
+    
+    // Add project title
+    const title = document.createElement('h3');
+    title.textContent = projectData.title;
+    detailsContainer.appendChild(title);
+    
+    // Add project description
+    const desc = document.createElement('p');
+    desc.textContent = projectData.description;
+    detailsContainer.appendChild(desc);
+    
+    // Create links section
+    const linksContainer = document.createElement('div');
+    linksContainer.classList.add('project-links');
+    
+    // Add main project link
+    const mainLink = document.createElement('a');
+    mainLink.href = projectData.link;
+    mainLink.classList.add('project-link');
+    mainLink.textContent = 'View Project';
+    
+    // Add icon to link
+    const icon = document.createElement('i');
+    icon.classList.add('fas', 'fa-arrow-right');
+    mainLink.appendChild(icon);
+    
+    linksContainer.appendChild(mainLink);
+    
+    // Add tech tags if available
+    if (projectData.technologies && projectData.technologies.length > 0) {
+        const techContainer = document.createElement('div');
+        techContainer.classList.add('project-tech');
+        
+        // Add up to 2 tech tags for mobile friendliness
+        for (let i = 0; i < Math.min(projectData.technologies.length, 2); i++) {
+            const tag = document.createElement('span');
+            tag.classList.add('tech-tag');
+            tag.textContent = projectData.technologies[i];
+            techContainer.appendChild(tag);
+        }
+        
+        linksContainer.appendChild(techContainer);
+    }
+    
+    // Assemble all elements
+    detailsContainer.appendChild(linksContainer);
+    cardInner.appendChild(imageContainer);
+    cardInner.appendChild(detailsContainer);
+    projectCard.appendChild(cardInner);
+    
+    // Get projects container and append new card
+    const projectsContainer = document.querySelector('.projects-container');
+    projectsContainer.appendChild(projectCard);
+    
+    // Apply entrance animation after a short delay
+    setTimeout(() => {
+        projectCard.style.opacity = '1';
+        projectCard.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Setup 3D effect for the new card
+    setupCardInteraction(projectCard);
+    
+    // Return the created card element
+    return projectCard;
+}
+
+/**
+ * Setup 3D interaction effect for a single card
+ * @param {HTMLElement} card - Project card element
+ */
+function setupCardInteraction(card) {
+    // For desktop - mouse hover effect
+    card.addEventListener('mousemove', e => {
+        if (window.innerWidth <= 768) return; // Skip on mobile devices
+        
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardCenterY = cardRect.top + cardRect.height / 2;
+        
+        // Calculate rotation based on mouse position relative to card center
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const rotateY = (mouseX - cardCenterX) / 20;
+        const rotateX = (cardCenterY - mouseY) / 20;
+        
+        const inner = card.querySelector('.project-card-inner');
+        inner.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(10px)`;
+    });
+    
+    // Reset card on mouse leave
+    card.addEventListener('mouseleave', () => {
+        const inner = card.querySelector('.project-card-inner');
+        inner.style.transform = 'rotateY(0) rotateX(0) translateZ(0)';
+    });
+}
+
+/**
+ * Load project data from JSON file or API endpoint
+ * @param {string} dataUrl - URL to project data JSON
+ */
+function loadProjects(dataUrl) {
+    fetch(dataUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Clear existing projects if needed
+            const projectsContainer = document.querySelector('.projects-container');
+            projectsContainer.innerHTML = '';
+            
+            // Add each project from the data
+            data.projects.forEach(project => {
+                addProject(project);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading projects:', error);
+            
+            // Load fallback projects in case of error
+            loadFallbackProjects();
+        });
+}
+
+/**
+ * Load fallback projects if API fails
+ */
+function loadFallbackProjects() {
+    // Sample fallback projects
+    const fallbackProjects = [
+        {
+            title: "FEMA Disaster Recovery",
+            description: "Interactive portal for disaster relief applications and status tracking",
+            imageUrl: "/images/projects/disaster-recovery.jpg",
+            link: "#disaster-recovery",
+            technologies: ["React", "Node.js"],
+            featured: true
+        },
+        {
+            title: "Relief Fund Tracker",
+            description: "Real-time dashboard for tracking disaster relief fund allocation",
+            imageUrl: "/images/projects/relief-fund.jpg",
+            link: "#relief-fund",
+            technologies: ["D3.js", "Firebase"]
+        },
+        {
+            title: "Emergency Alert System",
+            description: "Mobile-first notification system for emergency broadcasts",
+            imageUrl: "/images/projects/alert-system.jpg",
+            link: "#alert-system",
+            technologies: ["React Native", "AWS"]
+        },
+        {
+            title: "Volunteer Management",
+            description: "Platform connecting volunteers with disaster relief opportunities",
+            imageUrl: "/images/projects/volunteer.jpg",
+            link: "#volunteer",
+            technologies: ["Vue.js", "MongoDB"]
+        }
+    ];
+    
+    // Add fallback projects to the container
+    fallbackProjects.forEach(project => {
+        addProject(project);
+    });
+}
+
+/**
+ * Create ripple effect on buttons and interactive elements
+ */
+function createRippleEffect() {
+    document.addEventListener('click', function(event) {
+        // Only add ripple to elements with ripple class
+        if (!event.target.classList.contains('btn') && 
+            !event.target.classList.contains('project-link') &&
+            !event.target.classList.contains('nav-button')) {
+            return;
+        }
+        
+        const button = event.target;
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+        
+        button.appendChild(ripple);
+        
+        // Remove ripple after animation completes
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+}
+
+/**
+ * Initialize contact form functionality
+ */
+function initContactForm() {
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) return;
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        
+        // Validate form
+        if (!name || !email || !message) {
+            showNotification('Please fill in all fields', 'error');
+            return;
+        }
+        
+        // Simulate form submission
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        // Simulate API call with timeout
+        setTimeout(() => {
+            // Reset form
+            contactForm.reset();
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            
+            // Show success message
+            showNotification('Message sent successfully!', 'success');
+        }, 1500);
+    });
+}
+
+/**
+ * Display notification message
+ * @param {string} message - Notification message
+ * @param {string} type - Notification type (success, error, info)
+ */
+function showNotification(message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let notification = document.querySelector('.notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.classList.add('notification');
+        document.body.appendChild(notification);
+    }
+    
+    // Set message and type
+    notification.textContent = message;
+    notification.className = 'notification'; // Reset classes
+    notification.classList.add(`notification-${type}`);
+    
+    // Show notification
+    notification.classList.add('show');
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+/**
+ * Initialize the application when DOM is fully loaded
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize page loader
+    initPageLoader();
+    
+    // Initialize the website with animations and time-based features
+    initializeWebsite();
+    
+    // Setup custom cursor
+    setupCustomCursor();
+    
+    // Initialize theme toggle
+    initThemeToggle();
+    
+    // Initialize sound effects
+    initSoundEffects();
+    
+    // Create ripple effects
+    createRippleEffect();
+    
+    // Initialize contact form if it exists
+    initContactForm();
+    
+    // Load projects from API or fallback
+    loadProjects('/api/projects.json');
+});
