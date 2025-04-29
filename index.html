@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to FEMA - Explore My Creative Projects</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80' font-weight='bold'>F</text></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <!-- Page loader -->
+    <div class="page-loader">
+        <div class="loader-progress">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Theme toggle switch -->
+    <div class="theme-toggle" id="theme-toggle">
+        <div class="theme-toggle-thumb">
+            <div class="theme-toggle-icon sun">☀️</div>
+            <div class="theme-toggle-icon moon">🌙</div>
+        </div>
+    </div>
+
+    <!-- Background container that changes based on time of day -->
+    <div id="dynamic-background" class="dynamic-background">
+        <div class="gradient-bg"></div>
+        <div class="stars"></div>
+        <div class="celestial-body sun"></div>
+        <div class="celestial-body moon"></div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Header section with main text -->
+        <header class="header">
+            <h1 id="main-title">Selamat Datang di Website FEMA</h1>
+            <p id="subtitle">Terdapat banyak puluhan projek yang bisa Anda coba.</p>
+        </header>
+
+        <!-- Projects section -->
+        <section class="projects-section">
+            <h2>Projek Terbaru</h2>
+            
+            <!-- Navigation buttons for projects -->
+            <div class="projects-nav">
+                <button class="nav-button" id="prev-button">◀</button>
+                <button class="nav-button" id="next-button">▶</button>
+            </div>
+            
+            <!-- Mobile scroll indicator -->
+            <div class="mobile-scroll-indicator">
+                <span>Geser ke Samping</span>
+                <div class="arrow">→</div>
+            </div>
+            
+            <!-- Projects container with horizontal scroll on mobile -->
+            <div class="projects-container">
+                <!-- Project Card 1 -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-image">
+                            <img src="/api/placeholder/600/400" alt="Project 1">
+                            <div class="project-badge">New</div>
+                        </div>
+                        <div class="project-details">
+                            <h3>Project AI Assistant</h3>
+                            <p>Asisten virtual berbasis kecerdasan buatan</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Lihat Project</a>
+                                <div class="project-tech">
+                                    <span class="tech-tag">AI</span>
+                                    <span class="tech-tag">ML</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-image">
+                            <img src="/api/placeholder/600/400" alt="Project 2">
+                        </div>
+                        <div class="project-details">
+                            <h3>Aplikasi Smart Home</h3>
+                            <p>Kontrol rumah pintar dengan teknologi IoT</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Lihat Project</a>
+                                <div class="project-tech">
+                                    <span class="tech-tag">IoT</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-image">
+                            <img src="/api/placeholder/600/400" alt="Project 3">
+                        </div>
+                        <div class="project-details">
+                            <h3>E-Commerce Platform</h3>
+                            <p>Solusi belanja online dengan UI/UX modern</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Lihat Project</a>
+                                <div class="project-tech">
+                                    <span class="tech-tag">Web</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-image">
+                            <img src="/api/placeholder/600/400" alt="Project 4">
+                        </div>
+                        <div class="project-details">
+                            <h3>Game Development</h3>
+                            <p>Game berbasis WebGL dengan fisika realistis</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Lihat Project</a>
+                                <div class="project-tech">
+                                    <span class="tech-tag">Game</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="project-card">
+                    <div class="project-card-inner">
+                        <div class="project-image">
+                            <img src="/api/placeholder/600/400" alt="Project 5">
+                        </div>
+                        <div class="project-details">
+                            <h3>AR/VR Experience</h3>
+                            <p>Pengalaman augmented dan virtual reality</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Lihat Project</a>
+                                <div class="project-tech">
+                                    <span class="tech-tag">AR/VR</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio visualizer -->
+        <div class="audio-visualizer" id="audio-visualizer">
+            <!-- Audio bars will be added dynamically -->
+        </div>
+
+        <!-- Sound toggle button -->
+        <div class="sound-toggle" id="sound-toggle">
+            🔊
+        </div>
+
+        <!-- Footer section -->
+        <footer>
+            <div class="footer-links">
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Projects</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 FEMA. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Custom cursor elements -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <script src="script.js"></script>
+</body>
+                                      </html>
